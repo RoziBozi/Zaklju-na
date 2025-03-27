@@ -23,3 +23,7 @@ Cilj:
 • Biti najbolj prepoznavna stran za novice delnic
 • Biti najbolj prepoznavna stran za prikaz delnic
 
+Vire prihodkov:
+• Za uporabo AI je treba mesečno naročnino(5€)
+• Za pridobitev prikaza na grafu brez zaostanka je treba mesečna naročnina(2€)
+
