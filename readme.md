@@ -19,5 +19,7 @@ Funkcije:
 • Prikaz z grafom(chart)
 • Možnosti risanja po grafu
 
-
+Cilj:
+• Biti najbolj prepoznavna stran za novice delnic
+• Biti najbolj prepoznavna stran za prikaz delnic
 
