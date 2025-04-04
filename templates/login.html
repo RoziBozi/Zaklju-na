@@ -335,14 +335,15 @@
         }
     </style>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
     <div class="container">
         <h1 class="logo">GOAT-CHARTS</h1>
         
         <form id="loginForm" class="form-container">
             <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username" required>
+                <label for="username">Username or gmail</label>
+                <input type="text" id="username" placeholder="Enter your username or gmail" required>
                 <i class="fas fa-user input-icon"></i>
             </div>
             
@@ -353,7 +354,7 @@
             </div>
             
             
-            <button type="submit" class="btn">
+            <button type="submit" class="btn" onclick="login()">
                 <i class="fas fa-sign-in-alt"></i>
                 Sign In
             </button>
@@ -375,17 +376,22 @@
     </div>
 
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
-        function getAI(){
-           var output1 = document.getElementById("output1");
+        function login(){
+            const username = $('#password').val();
+            const password = $('#username').val();
+
             $.ajax({
-                url: "/getAI",
+                url: "/login",
+                type: 'POST',
                 data:{
-                    vprasanje : document.getElementById("vprasanje").value
+                    username : username,
+                    password : password,
                 },
+                
                 success: function(result) {
-                    output1.innerHTML = result;
+                    
                 }
             });
         }

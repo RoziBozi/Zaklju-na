@@ -58,7 +58,9 @@
             z-index: -1;
             animation: fadeInBackground 3s ease-in-out;
         }
-        
+        .gumb {
+            text-decoration: none;
+        }
         .container {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -380,16 +382,17 @@
         }
     </style>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
     <div class="container">
         <h1 class="logo">GOAT-CHARTS</h1>
         
         <p class="tagline">Create your account and start visualizing data like never before</p>
-        
+        <div id="error_msg"></div>
         <form id="registerForm" class="form-container">
             <div class="input-group">
-                <label for="fullname">Usrename</label>
-                <input type="text" id="fullname" placeholder="Enter your full name" required>
+                <label for="username">Usrename</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
                 <i class="fas fa-user input-icon"></i>
             </div>
             
@@ -407,9 +410,9 @@
             </div>
 
             
-            <button type="submit" class="btn">
+            <button class="btn" onclick="register(event)">
                 <i class="fas fa-user-plus"></i>
-                Create Account
+                Create account
             </button>
             
             <div id="statusMessage" class="status-message"></div>
@@ -428,17 +431,24 @@
         </div>
     </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
-        function getAI(){
-           var output1 = document.getElementById("output1");
+        function register(event){
+            event.preventDefault();
+            const username = $('#password').val();
+            const password = $('#username').val();
+            const gmail = $('#email').val();
+            var error_msg = document.getElementById("error_msg");
             $.ajax({
-                url: "/getAI",
+                url: "/register",
+                type: 'POST',
                 data:{
-                    vprasanje : document.getElementById("vprasanje").value
+                    username : username,
+                    password : password,
+                    gmail : gmail
                 },
                 success: function(result) {
-                    output1.innerHTML = result;
+                    error_msg.innerHTML = result;
                 }
             });
         }
