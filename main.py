@@ -58,24 +58,28 @@ def register():
         gmail = request.form["gmail"]
     
         data = [(username,gmail,password)]
-        conn = sqlite3.connect("main.db")
-        c = conn.cursor()
-        
-        c.execute("SELECT username, gmail FROM users WHERE username = ? OR gmail = ?", (username, gmail))
+        user = (username, gmail)
+        try:
+            with sqlite3.connect("main.db") as conn:
+                c = conn.cursor()
 
-        for user in c:
-            if username == user[0]:
-                
-                return "Username already taken" 
-            elif gmail == user[1]:
-                
-                return "Gmail already taken"
+                c.execute("SELECT username, gmail FROM users WHERE username = ? OR gmail = ?", (username, gmail))
+                obstajujoci = c.fetchone()
+                if obstajujoci:
+                    for user in obstajujoci:
+                        if username == user[0]:
+                            return "Username already taken" 
+                        elif gmail == user[1]:
+                            return "Gmail already taken"
 
-        c.execute("INSERT INTO users (username, gmail, password) VALUES (?, ?, ?)", (username, gmail, password))  
+                c.execute("INSERT INTO users (username, gmail, password) VALUES (?, ?, ?)", (username, gmail, password))  
 
-        conn.commit()
-        conn.close()
+                conn.commit()
+        except sqlite3.OperationalError as e:
+            return f"Database error: {e}"
+    
 
+        return "Successfully registered"
     return render_template("register.html")
 
 app.run(debug = True)
