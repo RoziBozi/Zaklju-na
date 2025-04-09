@@ -32,3 +32,16 @@ Vire prihodkov:
 - Za uporabo AI je treba mesečno naročnino(5€)
 - Za pridobitev prikaza na grafu brez zaostanka je treba mesečna naročnina(2€)
 
+MVP:
+- login in register
+- osnovni prikaz delnic
+- iskanje delnic
+- prikaz novic
+
+
+Končni produkt:
+- MVP
+- dodaja AI
+- dodaja mesečne naročnine
+- polepšanje izgleda
+- izbire najljubših delnic
