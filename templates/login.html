@@ -339,8 +339,8 @@
 <body>
     <div class="container">
         <h1 class="logo">GOAT-CHARTS</h1>
+        <div id="error_msg"></div>
         
-        <form id="loginForm" class="form-container">
             <div class="input-group">
                 <label for="username">Username or gmail</label>
                 <input type="text" id="username" placeholder="Enter your username or gmail" required>
@@ -354,13 +354,13 @@
             </div>
             
             
-            <button type="submit" class="btn" onclick="login()">
+            <button type="submit" class="btn" onclick="login(event)">
                 <i class="fas fa-sign-in-alt"></i>
                 Sign In
             </button>
             
             <div id="statusMessage" class="status-message"></div>
-        </form>
+        
         
         <div class="divider">
             <span>OR</span>
@@ -378,9 +378,10 @@
 </body>
 
     <script>
-        function login(){
-            const username = $('#password').val();
-            const password = $('#username').val();
+        function login(event){
+            event.preventDefault();
+            const username = $('#username').val();
+            const password = $('#password').val();
 
             $.ajax({
                 url: "/login",
@@ -391,7 +392,7 @@
                 },
                 
                 success: function(result) {
-                    
+                    error_msg.innerHTML = result;
                 }
             });
         }

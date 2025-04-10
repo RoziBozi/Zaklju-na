@@ -37,31 +37,25 @@ def login():
     if request.method == "POST":
         username_gmail = request.form["username"]
         password =  request.form["password"]
-    
+        print(username_gmail, password)
+
         with sqlite3.connect("main.db") as conn:
             c = conn.cursor()
-
+            
             uporabniki = c.execute("SELECT username, gmail, password FROM users")
-
+            uporabniki = c.fetchall()
             for user in uporabniki:
-                print(user)
-                if user[0] == username_gmail:
+
+                if user[0] == username_gmail or user[1] == username_gmail:
                     if user[2] == password:
                         c.close()
                         return redirect(url_for("index"))
                     else:
                         c.close()
                         return "password is incorrect"
-                elif user[1] == username_gmail:
-                    if user[2] == password:
-                        c.close()
-                        return redirect(url_for("index"))
-                    else:
-                        c.close()
-                        return "password is incorrect"
-                else:
-                    c.close()
-                    return "username or gmail is incorrect"
+                
+            c.close()
+            return "username or gmail is incorrect"
     return render_template("login.html")
 
 
@@ -77,12 +71,12 @@ def register():
         username = request.form["username"]
         password =  request.form["password"]
         gmail = request.form["gmail"]
-    
+        print(username, password, gmail)
         with sqlite3.connect("main.db") as conn:
             c = conn.cursor()
 
             uporabniki = c.execute("SELECT username, gmail FROM users")
-
+            print(uporabniki)
             for user in uporabniki:
                 print(user)
                 if user[0] == username:
@@ -92,7 +86,7 @@ def register():
                     c.close()
                     return "Gmail already taken"
 
-            c.execute("INSERT INTO users (username, gmail, password) VALUES (?, ?, ?)", (password, gmail, username))  
+            c.execute("INSERT INTO users (username, gmail, password) VALUES (?, ?, ?)", (username, gmail, password))  
 
             conn.commit()
         return "Registration successful"
