@@ -45,3 +45,4 @@ Končni produkt:
 - dodaja mesečne naročnine
 - polepšanje izgleda
 - izbire najljubših delnic
+- dodajanje oglasov na spletno stran

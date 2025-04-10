@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -48,14 +48,14 @@ def login():
                 if user[0] == username_gmail:
                     if user[2] == password:
                         c.close()
-                        return render_template("index.html")
+                        return redirect(url_for("index"))
                     else:
                         c.close()
                         return "password is incorrect"
                 elif user[1] == username_gmail:
                     if user[2] == password:
                         c.close()
-                        return render_template("index.html")
+                        return redirect(url_for("index"))
                     else:
                         c.close()
                         return "password is incorrect"
