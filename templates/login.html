@@ -392,8 +392,13 @@
                 },
                 
                 success: function(result) {
-                    error_msg.innerHTML = result;
-                }
+                    if(result = "login success"){
+                        window.location.href = "/index";
+                    }
+                    else{
+                        error_msg.innerHTML = result;
+                    }
+            }
             });
         }
     </script>

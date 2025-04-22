@@ -48,10 +48,9 @@ def login():
 
                 if user[0] == username_gmail or user[1] == username_gmail:
                     if user[2] == password:
-                        c.close()
-                        return redirect(url_for("index"))
+                        print("login successful")
+                        return "login successful"
                     else:
-                        c.close()
                         return "password is incorrect"
                 
             c.close()

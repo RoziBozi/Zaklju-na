@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
-    
+    <h1>Welcome to the Index Page</h1>
+
+    <h1>kofjawoifjalsdfmčalm</h1>
 </body>
 <script>
-    function getAI(){
-       var output1 = document.getElementById("output1");
+    function index(){
+       
         $.ajax({
-            url: "/getAI",
+            url: "/index",
             data:{
-                vprasanje : document.getElementById("vprasanje").value
             },
             success: function(result) {
-                output1.innerHTML = result;
+                
             }
         });
     }
