@@ -448,7 +448,12 @@
                     gmail : gmail
                 },
                 success: function(result) {
-                    error_msg.innerHTML = result;
+                    if(result = "Registration successful"){
+                        window.location.href = "/login";
+                    }
+                    else{
+                        error_msg.innerHTML = result;
+                    }
                 }
             });
         }

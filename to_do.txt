@@ -1,0 +1,6 @@
+TO DO:
+- naredi da nemore priti do glavne strani z uporabo /
+- polsepasj index
+- naredi tabelo da se stvari shranijo
+- profil
+- log out

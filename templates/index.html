@@ -9,17 +9,53 @@
 <body>
     <h1>Welcome to the Index Page</h1>
 
-    <h1>kofjawoifjalsdfmčalm</h1>
+    <input type="text" name="stock" id="choice" placeholder="Enter your choice">
+    <button type="submit" id="submit" onclick="index()">Add</button>
+    
+    <table border="1" id="stock">
+        <thead>
+            <th>Price Open</th>
+            <th>Price Close</th>
+            <th>High Price</th>
+            <th>Low Price</th>
+            <th>Volume</th>
+        </thead>
+        <tbody id="stock">
+
+
+        </tbody>
+
+    </table>
+    <div id="error"></div>
 </body>
 <script>
     function index(){
-       
+        const choice = $('#choice').val();
         $.ajax({
             url: "/index",
+            type: 'POST',
             data:{
+                choice: choice,
             },
-            success: function(result) {
-                
+            success: function(stock) {
+                const nov_tr = `
+                <tr>
+                    <td>${stock.price_open}</td>
+                    <td>${stock.price_close}</td>
+                    <td>${stock.high_price}</td>
+                    <td>${stock.low_price}</td>
+                    <td>${stock.volume}</td>
+                </tr>
+                `;
+
+                $('#stock').append(nov_tr);
+
+
+                if(stock.error) {
+                    stock.innerHTML = stock.error;
+                } else {
+                    stock.innerHTML = '';
+                }
             }
         });
     }

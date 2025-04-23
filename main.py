@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import sqlite3
+import yfinance as yf
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -17,8 +19,36 @@ def main():
     return render_template("first_page.html")
 
 
-@app.route("/index")
+@app.route("/index", methods = ["POST","GET"])
 def index():
+    if request.method == "POST":
+        choice = request.form["choice"]
+
+        choice = yf.Ticker(choice.upper())
+        data = choice.history(period="1d")
+        
+        if data.empty:
+            return jsonify({"error": "No data found"})
+
+
+
+        price_open = round(data["Open"].values[0],2)
+        price_close = round(data["Close"].values[0],2)
+        low_price = round(data["Low"].values[0],2)
+        high_price = round(data["High"].values[0],2)
+        volume = int(data["Volume"].values[0])
+        
+        stock = {"price_open": price_open, "price_close": price_close, "low_price": low_price, "high_price": high_price, "volume": volume}
+        
+        
+        print(stock)
+        return jsonify(stock)
+
+
+        
+    
+
+
     return render_template("index.html")
 
 
