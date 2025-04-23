@@ -26,21 +26,17 @@ def index():
 
         choice = yf.Ticker(choice.upper())
         data = choice.history(period="1d")
-        
+        splosna_data = choice.info
         if data.empty:
             return jsonify({"error": "No data found"})
 
-
-
+    
         price_open = round(data["Open"].values[0],2)
         price_close = round(data["Close"].values[0],2)
         low_price = round(data["Low"].values[0],2)
         high_price = round(data["High"].values[0],2)
         volume = int(data["Volume"].values[0])
-        
-        stock = {"price_open": price_open, "price_close": price_close, "low_price": low_price, "high_price": high_price, "volume": volume}
-        
-        
+        stock = {"price_open": price_open, "price_close": price_close, "low_price": low_price, "high_price": high_price, "volume": volume, "name": splosna_data["longName"]}
         print(stock)
         return jsonify(stock)
 
@@ -57,7 +53,7 @@ def charts():
     return render_template("charts.html")
 
 
-@app.route("/choice")
+@app.route("/choice", methods = ["POST","GET"])
 def choice():
     return render_template("choice.html")
 

@@ -14,11 +14,13 @@
     
     <table border="1" id="stock">
         <thead>
+            <th>Name</th>
             <th>Price Open</th>
             <th>Price Close</th>
             <th>High Price</th>
             <th>Low Price</th>
             <th>Volume</th>
+            <th>/</th>
         </thead>
         <tbody id="stock">
 
@@ -40,11 +42,13 @@
             success: function(stock) {
                 const nov_tr = `
                 <tr>
+                    <td><button class="preusmeri">${stock.name}</button></td>
                     <td>${stock.price_open}</td>
                     <td>${stock.price_close}</td>
                     <td>${stock.high_price}</td>
                     <td>${stock.low_price}</td>
                     <td>${stock.volume}</td>
+                    <td><button class="del">Remove</button></td>
                 </tr>
                 `;
 
@@ -57,6 +61,24 @@
                     stock.innerHTML = '';
                 }
             }
+        });
+        $(document).on('click', '.del', function() {
+            $(this).closest('tr').remove();
+        });
+
+        $(document).on('click', '.preusmeri', function() {
+            const choice = $('#choice').val();
+
+            $.ajax({
+            url: "/choice",
+            type: 'POST',
+            data:{
+                choice: choice,
+            },
+            success: function(){
+                window.location.href = "/choice";
+            }
+        });
         });
     }
 </script>
