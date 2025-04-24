@@ -36,7 +36,13 @@ def index():
         low_price = round(data["Low"].values[0],2)
         high_price = round(data["High"].values[0],2)
         volume = int(data["Volume"].values[0])
-        stock = {"price_open": price_open, "price_close": price_close, "low_price": low_price, "high_price": high_price, "volume": volume, "name": splosna_data["longName"]}
+        stock = {"price_open": price_open,
+                "price_close": price_close,
+                "low_price": low_price,
+                "high_price": high_price,
+                "volume": volume,
+                "name": splosna_data["longName"]
+            }
         print(stock)
         return jsonify(stock)
 
