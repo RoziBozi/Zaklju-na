@@ -25,9 +25,12 @@ def index():
         choice = request.form["choice"]
 
         choice = yf.Ticker(choice.upper())
-        data = choice.history(period="1d")
+        data = choice.history(period="1d", interval="1m")
+
         splosna_data = choice.info
+        print(data)
         if data.empty:
+            print("No data found")
             return jsonify({"error": "No data found"})
 
     
@@ -61,6 +64,19 @@ def charts():
 
 @app.route("/choice", methods = ["POST","GET"])
 def choice():
+
+    if request.method == "POST":
+        choice = request.form["choice"]
+        
+        
+        choice = yf.Ticker(choice.upper())
+
+
+        data = choice.history(period="1y")
+
+
+
+
     return render_template("choice.html")
 
 
