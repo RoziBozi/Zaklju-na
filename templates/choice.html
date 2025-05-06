@@ -8,14 +8,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
     <h1>Welcome to the AI Page</h1>
+    
+    <div id="output1"></div>
 </body>
 <script>
-    function getAI(){
-       var output1 = document.getElementById("output1");
+    function choice(){
+       
         $.ajax({
-            url: "/getAI",
+            url: "/choice",
             data:{
-                vprasanje : document.getElementById("vprasanje").value
+                dolzina: dolzina
             },
             success: function(result) {
                 output1.innerHTML = result;
