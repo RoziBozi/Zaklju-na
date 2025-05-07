@@ -60,23 +60,15 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/charts")
+@app.route("/charts", methods = ["POST","GET"])
 def charts():
-    
-
-
-    return render_template("charts.html")
-
-
-@app.route("/choice", methods = ["POST","GET"])
-def choice():
     if request.method == "POST":
         choice = request.form["choice"]
         print(choice)
         choice = yf.Ticker(choice.upper())
 
 
-        data = choice.history(period="5y")
+        data = choice.history(period="1y")
         
         data.to_csv("data.csv")
         data = pd.read_csv("data.csv")
@@ -88,9 +80,17 @@ def choice():
                             close=data["Close"],
                             name=choice.info["longName"],
                             )
-        print(pl.Figure(data=[chart_data], layout=pl.Layout(title=choice.info["longName"])).to_html(full_html=False, include_plotlyjs="cdn"))
-        return pl.Figure(data=[chart_data], layout=pl.Layout(title=choice.info["longName"])).to_html(full_html=False, include_plotlyjs="cdn")	
+        chart = pl.Figure(data=[chart_data])
+        chart.show()
 
+
+    return render_template("charts.html")
+
+
+@app.route("/choice", methods = ["POST","GET"])
+def choice():
+    
+        
     
 
 
