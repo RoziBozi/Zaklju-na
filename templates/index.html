@@ -27,7 +27,11 @@
 
 
         </tbody>
-
+        <div>
+            <a href="/charts">Chart</a>
+            <a href="/news">News</a>
+        </div>
+        
     </table>
     <div id="error"></div>
 </body>
@@ -49,7 +53,6 @@
                     <td>${stock.high_price}</td>
                     <td>${stock.low_price}</td>
                     <td>${stock.volume}</td>
-                    <td><button class="preusmeri">Chart</button></td>
                     <td><button class="del">Remove</button></td>
                 </tr>
                 `;
@@ -66,21 +69,6 @@
         });
         $(document).on('click', '.del', function() {
             $(this).closest('tr').remove();
-        });
-
-        $(document).on("click", ".preusmeri", function() {
-            const choice = $('#choice').val().trim();
-
-            $.ajax({
-            url: "/charts",
-            type: 'POST',
-            data:{
-                choice: choice,
-            },
-            success: function(){
-                window.location.href = "/index";
-            }
-        });
         });
     }
 </script>

@@ -59,7 +59,6 @@ def index():
 
     return render_template("index.html")
 
-
 @app.route("/charts", methods = ["POST","GET"])
 def charts():
     if request.method == "POST":
@@ -81,21 +80,10 @@ def charts():
                             name=choice.info["longName"],
                             )
         chart = pl.Figure(data=[chart_data])
-        chart.show()
-
+        chart_za_stran = chart.to_html(full_html=False, include_plotlyjs="cdn")
+        return jsonify({"chart": chart_za_stran})
 
     return render_template("charts.html")
-
-
-@app.route("/choice", methods = ["POST","GET"])
-def choice():
-    
-        
-    
-
-
-    return render_template("choice.html")
-
 
 @app.route("/login", methods = ["POST","GET"])
 def login():
@@ -125,6 +113,7 @@ def login():
 
 @app.route("/news")
 def news():
+
     return render_template("news.html")
 
 

@@ -7,18 +7,24 @@
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
+    <h1>Charts</h1>
+
     
+    <input type="text" name="stock" id="choice" placeholder="Enter your choice">
+    <button type="submit" id="submit" onclick="index()">Add</button>
+
+    <div id="chart_output"></div>
 </body>
 <script>
-    function getAI(){
-       var output1 = document.getElementById("output1");
+    function news(){
+        const choice = $('#choice').val().trim();
         $.ajax({
-            url: "/getAI",
+            url: "/news",
             data:{
-                vprasanje : document.getElementById("vprasanje").value
+                choice: choice,
             },
             success: function(result) {
-                output1.innerHTML = result;
+                chart_output.innerHTML = result;
             }
         });
     }
