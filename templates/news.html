@@ -3,23 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stock News</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --accent-color: #bb86fc;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --border-color: #333333;
+            --card-bg: #252525;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .input-container {
+            margin-bottom: 2rem;
+        }
+        
+        input {
+            padding: 0.8rem 1rem;
+            border: none;
+            background-color: #2d2d2d;
+            color: var(--text-primary);
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-right: 10px;
+            width: 300px;
+        }
+        
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        button {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #9965db;
+        }
+        
+        #news {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Override article styling for dark theme */
+        .novica {
+            margin-bottom: 20px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            transition: transform 0.2s ease;
+        }
+        
+        .novica:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .novica h2 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+        
+        .novica p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .novica a {
+            display: inline-block;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            transition: color 0.2s ease;
+        }
+        
+        .novica a:hover {
+            color: #9965db;
+            text-decoration: underline;
+        }
+        
+        /* Empty state */
+        #news:empty {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+        }
+        
+        #news:empty:before {
+            content: "Enter a stock symbol to display related news";
+            font-style: italic;
+        }
+        
+        /* Navigation */
+        .navigation {
+            margin-top: 2rem;
+        }
+        
+        a {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+        
+        /* Loading state */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+            width: 100%;
+        }
+        
+        .loading:after {
+            content: "";
+            width: 40px;
+            height: 40px;
+            border: 4px solid #333;
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Error message */
+        .error-message {
+            padding: 1rem;
+            background-color: rgba(207, 102, 121, 0.1);
+            border-left: 4px solid #cf6679;
+            color: #cf6679;
+            border-radius: 4px;
+        }
+    </style>
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
-    <h1>News</h1>
+    <div class="container">
+        <h1>News</h1>
 
-    
-    <input type="text" name="stock" id="choice" placeholder="Enter your choice">
-    <button type="submit" id="submit" onclick="fetchNews()">Show</button>
+        <div class="input-container">
+            <input type="text" name="stock" id="choice" placeholder="Enter your choice">
+            <button type="submit" id="submit" onclick="fetchNews()">Show</button>
+        </div>
 
-    <div id="news">
-
-
-    </div>
-    <div>
-        <a href="/index">Back</a>
-
+        <div id="news"></div>
+        
+        <div class="navigation">
+            <a href="/index">Back</a>
+        </div>
     </div>
 </body>
 <script>

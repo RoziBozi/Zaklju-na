@@ -3,36 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stock Tracker</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --accent-color: #bb86fc;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --danger: #cf6679;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        input {
+            padding: 0.8rem 1rem;
+            border: none;
+            background-color: #2d2d2d;
+            color: var(--text-primary);
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-right: 10px;
+            width: 300px;
+        }
+        
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        button {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #9965db;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        th {
+            background-color: #252525;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #252525;
+        }
+        
+        .del {
+            background-color: var(--danger);
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+        
+        .del:hover {
+            background-color: #b55a68;
+        }
+        
+        #error {
+            color: var(--danger);
+            margin-top: 1rem;
+        }
+        
+        .navigation {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        a {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Index Page</h1>
+    <div class="container">
+        <h1>Stock Tracker</h1>
 
-    <input type="text" name="stock" id="choice" placeholder="Enter your choice">
-    <button type="submit" id="submit" onclick="index()">Add</button>
-
-    <table border="1" id="stock">
-        <thead>
-            <th>Name</th>
-            <th>Price Open</th>
-            <th>Price Close</th>
-            <th>High Price</th>
-            <th>Low Price</th>
-            <th>Volume</th>
-            <th>/</th>
-        </thead>
-        <tbody id="stock">
-
-
-        </tbody>
         <div>
+            <input type="text" name="stock" id="choice" placeholder="Enter stock symbol">
+            <button type="submit" id="submit" onclick="index()">Add</button>
+        </div>
+
+        <table border="1" id="stock">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price Open</th>
+                    <th>Price Close</th>
+                    <th>High Price</th>
+                    <th>Low Price</th>
+                    <th>Volume</th>
+                    <th>/</th>
+                </tr>
+            </thead>
+            <tbody id="stock">
+
+            </tbody>
+        </table>
+        
+        <div id="error"></div>
+        
+        <div class="navigation">
             <a href="/charts">Chart</a>
             <a href="/news">News</a>
         </div>
-        
-    </table>
-    <div id="error"></div>
+    </div>
 </body>
 <script>
     function index(){

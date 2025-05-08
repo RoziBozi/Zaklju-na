@@ -1,22 +1,144 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stock Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --accent-color: #bb86fc;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --danger: #cf6679;
+            --chart-bg: #252525;
+            --chart-grid: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .input-container {
+            margin-bottom: 2rem;
+        }
+        
+        input {
+            padding: 0.8rem 1rem;
+            border: none;
+            background-color: #2d2d2d;
+            color: var(--text-primary);
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-right: 10px;
+            width: 300px;
+        }
+        
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        button {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #9965db;
+        }
+        
+        #chart_output {
+            background-color: var(--chart-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            min-height: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Empty state for chart */
+        #chart_output:empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        #chart_output:empty:before {
+            content: "Enter a stock symbol to display chart";
+        }
+        
+        
+        /* Navigation */
+        .navigation {
+            margin-top: 2rem;
+        }
+        
+        a {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+        
+        
+    </style>
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 <body>
-    <h1>Charts</h1>
+    <div class="container">
+        <h1>Charts</h1>
 
-    
-    <input type="text" name="stock" id="choice" placeholder="Enter your choice">
-    <button type="submit" id="submit" onclick="charts()">Add</button>
+        <div class="input-container">
+            <input type="text" name="stock" id="choice" placeholder="Enter your choice">
+            <button type="submit" id="submit" onclick="charts()">Add</button>
+        </div>
 
-    <div id="chart_output"></div>
-    <div>
-        <a href="/index">Back</a>
-
+        <div id="chart_output"></div>
+        
+        <div class="navigation">
+            <a href="/index">Back</a>
+        </div>
     </div>
 </body>
 <script>
