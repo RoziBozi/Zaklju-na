@@ -7,24 +7,28 @@
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
-    <h1>Charts</h1>
+    <h1>News</h1>
 
     
     <input type="text" name="stock" id="choice" placeholder="Enter your choice">
-    <button type="submit" id="submit" onclick="index()">Add</button>
+    <button type="submit" id="submit" onclick="charts()">Show</button>
 
-    <div id="chart_output"></div>
+    <div id="news"></div>
+    <div>
+        <a href="/index">Back</a>
+
+    </div>
 </body>
 <script>
     function news(){
         const choice = $('#choice').val().trim();
         $.ajax({
             url: "/news",
+            type: 'POST',
             data:{
                 choice: choice,
             },
             success: function(result) {
-                chart_output.innerHTML = result;
             }
         });
     }

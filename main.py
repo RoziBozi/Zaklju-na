@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as pl
 import time
 import requests
+import feedparser
 
 app = Flask(__name__)
 
@@ -111,8 +112,14 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/news")
+@app.route("/news", methods = ["POST","GET"])
 def news():
+    if request.method == "POST":
+        choice = request.form["choice"]
+        print(choice)
+        
+        
+
 
     return render_template("news.html")
 
