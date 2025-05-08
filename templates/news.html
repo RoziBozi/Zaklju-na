@@ -11,25 +11,61 @@
 
     
     <input type="text" name="stock" id="choice" placeholder="Enter your choice">
-    <button type="submit" id="submit" onclick="charts()">Show</button>
+    <button type="submit" id="submit" onclick="fetchNews()">Show</button>
 
-    <div id="news"></div>
+    <div id="news">
+
+
+    </div>
     <div>
         <a href="/index">Back</a>
 
     </div>
 </body>
 <script>
-    function news(){
-        const choice = $('#choice').val().trim();
-        $.ajax({
-            url: "/news",
-            type: 'POST',
-            data:{
-                choice: choice,
-            },
-            success: function(result) {
+    function fetchNews() {
+    const choice = $('#choice').val().trim();
+    $.ajax({
+        url: "/news",
+        type: 'POST',
+        data: {
+            choice: choice,
+        },
+        success: function(response) {
+            const articles = response.article;
+
+            $('#news').empty(); // Clear existing content
+
+            if (!Array.isArray(articles) || articles.length === 0) {
+                $('#news').html("<p>No matching news found.</p>");
+                return;
             }
+
+            // Loop through and display each article
+            articles.forEach(article => {
+                const date = new Date(article.published);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const html = `
+                    <div class="novica" style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                        <h2>${article.title}</h2>
+                        <p><em>${formattedDate}</em></p>
+                        <a href="${article.link}" target="_blank">Read more</a>
+                    </div>
+                `;
+
+                $('#news').append(html);
+            });
+        },
+        error: function() {
+            $('#news').html("<p>Failed to fetch news. Please try again later.</p>");
+        }
         });
     }
 </script>
