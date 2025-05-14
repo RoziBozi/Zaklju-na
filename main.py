@@ -130,17 +130,17 @@ def news():
         if request.method == "POST":
             choice = request.form["choice"]
             print(choice)
-    
+
             news_url_list = ["https://finance.yahoo.com/news/rssindex","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839069","https://feeds.a.dj.com/rss/RSSMarketsMain.xml","https://news.ycombinator.com/rss"]
-            
-                    
+
+
             list_artiklov = []
-    
+
             for news_url in news_url_list:
                 artikel = feedparser.parse(news_url)
-    
+
                 for specificen_artikel in artikel.entries:
-                
+
                     if choice.lower() in specificen_artikel.title.lower():
                         list_artiklov.append({
                             "title": specificen_artikel.title,
@@ -152,9 +152,9 @@ def news():
                 return jsonify({"article": list_artiklov})
             else:
                 return jsonify({"article": {}})
-    
+
         return render_template("news.html")
-    
+
 
 @app.route("/logout", methods = ["POST","GET"])
 def logout():
