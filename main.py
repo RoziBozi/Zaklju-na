@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import sqlite3
 import yfinance as yf
 import pandas as pd
@@ -6,9 +6,11 @@ import plotly.graph_objects as pl
 import time
 import requests
 import feedparser
+import hashlib
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-
+app.secret_key = "adolkndnfaelkfnokčvnčeoifnhqwoj3490u83190"
 conn = sqlite3.connect("main.db")
 
 c = conn.cursor()
@@ -25,74 +27,79 @@ def main():
 
 @app.route("/index", methods = ["POST","GET"])
 def index():
-    if request.method == "POST":
-        choice = request.form["choice"]
 
-        choice = yf.Ticker(choice.upper())
-        data = choice.history(period="1d", interval="1m")
+    if "username" not in session:
+        return redirect(url_for("login"))
+    else:
+        if request.method == "POST":
+            choice = request.form["choice"]
+            choice = yf.Ticker(choice.upper())
+            data = choice.history(period="1d", interval="1m")
+            splosna_data = choice.info
+            print(data)
+            if data.empty:
+                print("No data found")
+                return jsonify({"error": "No data found"})
+            price_open = round(data["Open"].values[0],2)
+            price_close = round(data["Close"].values[0],2)
+            low_price = round(data["Low"].values[0],2)
+            high_price = round(data["High"].values[0],2)
+            volume = int(data["Volume"].values[0])
+            stock = {"price_open": price_open,
+                    "price_close": price_close,
+                    "low_price": low_price,
+                    "high_price": high_price,
+                    "volume": volume,
+                    "name": splosna_data["longName"]
+                }
+            print(stock)
+            return jsonify(stock)
+        return render_template("index.html")
 
-        splosna_data = choice.info
-        print(data)
-        if data.empty:
-            print("No data found")
-            return jsonify({"error": "No data found"})
 
-    
-        price_open = round(data["Open"].values[0],2)
-        price_close = round(data["Close"].values[0],2)
-        low_price = round(data["Low"].values[0],2)
-        high_price = round(data["High"].values[0],2)
-        volume = int(data["Volume"].values[0])
-        stock = {"price_open": price_open,
-                "price_close": price_close,
-                "low_price": low_price,
-                "high_price": high_price,
-                "volume": volume,
-                "name": splosna_data["longName"]
-            }
-        print(stock)
-        return jsonify(stock)
 
 
         
     
 
 
-    return render_template("index.html")
+   
 
 @app.route("/charts", methods = ["POST","GET"])
 def charts():
-    if request.method == "POST":
-        choice = request.form["choice"]
-        print(choice)
-        choice = yf.Ticker(choice.upper())
+    if "username" not in session:
+        return redirect(url_for("login"))
+    else:
+        if request.method == "POST":
+            choice = request.form["choice"]
+            print(choice)
+            choice = yf.Ticker(choice.upper())
 
 
-        data = choice.history(period="1y")
-        
-        data.to_csv("data.csv")
-        data = pd.read_csv("data.csv")
+            data = choice.history(period="1y")
 
-        chart_data = pl.Candlestick(x=data["Date"],
-                            open=data["Open"],
-                            high=data["High"],
-                            low=data["Low"],
-                            close=data["Close"],
-                            name=choice.info["longName"],
-                            )
-        chart = pl.Figure(data=[chart_data])
-        chart_za_stran = chart.to_html(full_html=False, include_plotlyjs="cdn")
+            data.to_csv("data.csv")
+            data = pd.read_csv("data.csv")
 
-        return jsonify({"chart": chart_za_stran})
+            chart_data = pl.Candlestick(x=data["Date"],
+                                open=data["Open"],
+                                high=data["High"],
+                                low=data["Low"],
+                                close=data["Close"],
+                                name=choice.info["longName"],
+                                )
+            chart = pl.Figure(data=[chart_data])
+            chart_za_stran = chart.to_html(full_html=False, include_plotlyjs="cdn")
 
-    return render_template("charts.html")
+            return jsonify({"chart": chart_za_stran})
+
+        return render_template("charts.html")
 
 @app.route("/login", methods = ["POST","GET"])
 def login():
     if request.method == "POST":
         username_gmail = request.form["username"]
         password =  request.form["password"]
-        print(username_gmail, password)
 
         with sqlite3.connect("main.db") as conn:
             c = conn.cursor()
@@ -102,8 +109,10 @@ def login():
             for user in uporabniki:
 
                 if user[0] == username_gmail or user[1] == username_gmail:
-                    if user[2] == password:
+                    if check_password_hash(user[2], password):
                         print("login successful")
+                        session["username"] = user[0]
+                        print(session["username"])
                         return "login successful"
                     else:
                         return "password is incorrect"
@@ -115,34 +124,42 @@ def login():
 
 @app.route("/news", methods = ["POST","GET"])
 def news():
-    if request.method == "POST":
-        choice = request.form["choice"]
-        print(choice)
-
-        news_url_list = ["https://finance.yahoo.com/news/rssindex","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839069","https://feeds.a.dj.com/rss/RSSMarketsMain.xml","https://news.ycombinator.com/rss"]
-        
+    if "username" not in session:
+        return redirect(url_for("login"))
+    else:
+        if request.method == "POST":
+            choice = request.form["choice"]
+            print(choice)
+    
+            news_url_list = ["https://finance.yahoo.com/news/rssindex","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839069","https://feeds.a.dj.com/rss/RSSMarketsMain.xml","https://news.ycombinator.com/rss"]
+            
+                    
+            list_artiklov = []
+    
+            for news_url in news_url_list:
+                artikel = feedparser.parse(news_url)
+    
+                for specificen_artikel in artikel.entries:
                 
-        list_artiklov = []
+                    if choice.lower() in specificen_artikel.title.lower():
+                        list_artiklov.append({
+                            "title": specificen_artikel.title,
+                            "link": specificen_artikel.link,
+                            "published": specificen_artikel.published
+                        })
+            print(list_artiklov)
+            if list_artiklov:
+                return jsonify({"article": list_artiklov})
+            else:
+                return jsonify({"article": {}})
+    
+        return render_template("news.html")
+    
 
-        for news_url in news_url_list:
-            artikel = feedparser.parse(news_url)
-
-            for specificen_artikel in artikel.entries:
-
-                if choice.lower() in specificen_artikel.title.lower():
-                    list_artiklov.append({
-                        "title": specificen_artikel.title,
-                        "link": specificen_artikel.link,
-                        "published": specificen_artikel.published
-                    })
-        print(list_artiklov)
-        if list_artiklov:
-            return jsonify({"article": list_artiklov})
-        else:
-            return jsonify({"article": {}})
-
-    return render_template("news.html")
-
+@app.route("/logout", methods = ["POST","GET"])
+def logout():
+    session.pop("username", None)
+    return redirect(url_for("login"))
 
 @app.route("/register", methods = ["POST","GET"])
 def register():
@@ -165,8 +182,10 @@ def register():
                 elif user[1] == gmail:
                     c.close()
                     return "Gmail already taken"
-
-            c.execute("INSERT INTO users (username, gmail, password) VALUES (?, ?, ?)", (username, gmail, password))  
+                
+            password = generate_password_hash(password, method='pbkdf2:sha256')
+            
+            c.execute("INSERT INTO users (username, gmail, password) VALUES (?, ?, ?)", (username, gmail, password))
 
             conn.commit()
         return "Registration successful"
