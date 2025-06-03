@@ -1,0 +1,7 @@
+Flask
+yfinance
+pandas
+plotly
+requests
+feedparser
+Werkzeug

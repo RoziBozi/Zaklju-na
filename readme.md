@@ -1,3 +1,5 @@
+pip install -r requirements.txt --user
+
 Spletna stran za delnice (www.goat-charts.si)
 
 Reševanje problema:
